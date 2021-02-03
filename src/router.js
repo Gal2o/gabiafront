@@ -16,45 +16,32 @@ export default new Router({
           name: 'Dashboard',
           path: '',
           component: () => import('@/views/dashboard/Dashboard'),
+          meta: '메인화면',
         },
         // Pages
         {
           name: 'User Profile',
           path: 'pages/user',
           component: () => import('@/views/dashboard/pages/UserProfile'),
+          meta: '내 정보',
         },
         {
-          name: 'Notifications',
-          path: 'components/notifications',
-          component: () => import('@/views/dashboard/component/Notifications'),
+          name: 'Notice',
+          path: 'pages/notice',
+          component: () => import('@/views/dashboard/pages/Notice'),
+          meta: '공지사항',
         },
         {
-          name: 'Icons',
-          path: 'components/icons',
-          component: () => import('@/views/dashboard/component/Icons'),
+          name: 'BookList',
+          path: 'pages/BookList',
+          component: () => import('@/views/dashboard/pages/BookList'),
+          meta: '도서목록',
         },
         {
-          name: 'Typography',
-          path: 'components/typography',
-          component: () => import('@/views/dashboard/component/Typography'),
-        },
-        // Tables
-        {
-          name: 'Regular Tables',
-          path: 'tables/regular-tables',
-          component: () => import('@/views/dashboard/tables/RegularTables'),
-        },
-        // Maps
-        {
-          name: 'Google Maps',
-          path: 'maps/google-maps',
-          component: () => import('@/views/dashboard/maps/GoogleMaps'),
-        },
-        // Upgrade
-        {
-          name: 'Upgrade',
-          path: 'upgrade',
-          component: () => import('@/views/dashboard/Upgrade'),
+          name: 'BookRequest',
+          path: 'pages/BookRequest',
+          component: () => import('@/views/dashboard/pages/BookRequest'),
+          meta: '도서신청',
         },
       ],
     },

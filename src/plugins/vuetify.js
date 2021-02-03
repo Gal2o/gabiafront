@@ -4,10 +4,10 @@ import i18n from '@/i18n'
 import '@/sass/overrides.sass'
 
 Vue.use(Vuetify)
-
+// 색깔 바꾸기 초기 값
 const theme = {
-  primary: '#4CAF50',
-  secondary: '#9C27b0',
+  primary: '#53739b', // 첫 메뉴바 셀렉트 색
+  secondary: '#FFFFFF', // 다크모드 토글 버튼 바뀌는 색
   accent: '#9C27b0',
   info: '#00CAE3',
 }

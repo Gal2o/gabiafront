@@ -7,6 +7,7 @@
     flat
     height="75"
   >
+    <!-- 헤더 : 바 on/off -->
     <v-btn
       class="mr-3"
       elevation="1"
@@ -14,27 +15,27 @@
       small
       @click="setDrawer(!drawer)"
     >
-      <v-icon v-if="value">
-        mdi-view-quilt
+      <v-icon v-if="drawer"> <!--props.value 인식 X -> drawer로 수정-->
+        mdi-menu-left-outline
       </v-icon>
 
       <v-icon v-else>
-        mdi-dots-vertical
+        mdi-menu-right-outline
       </v-icon>
     </v-btn>
 
     <v-toolbar-title
       class="hidden-sm-and-down font-weight-light"
-      v-text="$route.name"
+      v-text="$route.meta"
     />
 
     <v-spacer />
-
+    <!-- 헤더 : 검색 -->
     <v-text-field
-      :label="$t('search')"
+      :label="$t('검색어를 입력해 주세요.')"
       color="secondary"
       hide-details
-      style="max-width: 165px;"
+      style="max-width: 300px;"
     >
       <template
         v-if="$vuetify.breakpoint.mdAndUp"
@@ -59,7 +60,16 @@
       text
       to="/"
     >
-      <v-icon>mdi-view-dashboard</v-icon>
+      <v-icon>mdi-home</v-icon>
+    </v-btn>
+    <!-- 헤더 : components/core/settings 여기서 불러오기 -->
+    <v-btn
+      id="settings"
+      class="ml-2"
+      min-width="0"
+      text
+      >
+    <v-icon>mdi-cog</v-icon>
     </v-btn>
 
     <v-menu
@@ -69,6 +79,7 @@
       origin="top right"
       transition="scale-transition"
     >
+      <!-- 알람 / 배지 -->
       <template v-slot:activator="{ attrs, on }">
         <v-btn
           class="ml-2"
@@ -83,7 +94,7 @@
             bordered
           >
             <template v-slot:badge>
-              <span>5</span>
+              <span>{{notifications.length}}</span>
             </template>
 
             <v-icon>mdi-bell</v-icon>
@@ -120,7 +131,6 @@
 <script>
   // Components
   import { VHover, VListItem } from 'vuetify/lib'
-
   // Utilities
   import { mapState, mapMutations } from 'vuex'
 
@@ -162,11 +172,13 @@
 
     data: () => ({
       notifications: [
-        'Mike John Responded to your email',
-        'You have 5 new tasks',
-        'You\'re now friends with Andrew',
-        'Another Notification',
-        'Another one',
+        '알람 입니다.',
+        '알람 인데요?',
+        '금요일 재택 안하나요',
+        '운동',
+        '자바 대여 완료',
+        '자바 반납 완료',
+        '자바 연장 완료',
       ],
     }),
 
