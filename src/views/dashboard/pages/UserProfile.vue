@@ -11,7 +11,7 @@
       >
         <base-material-card
           class="v-card-profile"
-          avatar="https://demos.creative-tim.com/vue-material-dashboard/img/marc.aba54d65.jpg"
+          avatar="https://opgg-static.akamaized.net/images/lol/champion/Galio.png?image=q_auto,w_200&v=1591083841"
         >
           <v-card-text class="text-center">
             <h6 class="display-1 mb-1 grey--text">
@@ -19,11 +19,11 @@
             </h6>
 
             <h4 class="display-2 font-weight-light mb-3 black--text">
-              가비아
+              Matt
             </h4>
 
             <p class="font-weight-light grey--text">
-              안녕하세요 인턴입니다. 전환시켜주세요.
+              안녕하세요 인턴입니다.
             </p>
           </v-card-text>
         </base-material-card>
@@ -72,7 +72,7 @@
                 >
                   <v-text-field
                     label="이름"
-                    disabled
+                    class="purple-input"
                   />
                 </v-col>
 
