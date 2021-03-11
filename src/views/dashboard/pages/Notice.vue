@@ -4,185 +4,116 @@
     fluid
     tag="section"
   >
-    <base-v-component
-      heading="Simple Tables"
-      link="components/simple-tables"
+    <Notice-Add-Form
+      v-if="this.$store.state.role.includes('ADMIN') === true"
     />
 
+    <div class="py-3" />
+
     <base-material-card
+      color="warning"
       icon="mdi-clipboard-text"
-      title="Simple Table"
+      title="공지사항"
       class="px-5 py-3"
     >
       <v-simple-table>
         <thead>
           <tr>
-            <th class="primary--text">
-              ID
+            <th class="text-center">
+              제목
             </th>
-            <th class="primary--text">
-              Name
-            </th>
-            <th class="primary--text">
-              Country
-            </th>
-            <th class="primary--text">
-              City
-            </th>
-            <th class="text-right primary--text">
-              Salary
+            <th class="text-center">
+              등록일
             </th>
           </tr>
         </thead>
-
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Dakota Rice</td>
-            <td>Niger</td>
-            <td>Oud-Turnhout</td>
-            <td class="text-right">
-              $36,738
-            </td>
+          <tr
+            v-for="(item, n) in noticeList"
+            :key="n"
+            class="text-center"
+            @click="goDetail(item)"
+          >
+            <td>{{ item.title }}</td>
+            <td>{{ item.createdDate }}</td>
           </tr>
-
-          <tr>
-            <td>2</td>
-            <td>Minverva Hooper</td>
-            <td>Curaçao</td>
-            <td>Sinaas-Waas</td>
-            <td class="text-right">
-              $23,789
-            </td>
-          </tr>
-
-          <tr>
-            <td>3</td>
-            <td>Sage Rodriguez</td>
-            <td>Netherlands</td>
-            <td>Baileux</td>
-            <td class="text-right">
-              $56,142
-            </td>
-          </tr>
-
-          <tr>
-            <td>4</td>
-            <td>Philip Chaney</td>
-            <td>Korea, South</td>
-            <td>Overland Park</td>
-            <td class="text-right">
-              $38,735
-            </td>
-          </tr>
-
-          <tr>
-            <td>5</td>
-            <td>Doris Greene</td>
-            <td>Malawi</td>
-            <td>Feldkirchen in Kärnten</td>
-            <td class="text-right">
-              $63,542
-            </td>
-          </tr>
-
-          <tr>
-            <td>6</td>
-            <td>Mason Porter</td>
-            <td>Chile</td>
-            <td>Gloucester</td>
-            <td class="text-right">
-              $78,615
-            </td>
-          </tr>
+          <Notice-Detail
+            v-model="dialog"
+            :item="item"
+          />
         </tbody>
       </v-simple-table>
     </base-material-card>
 
     <div class="py-3" />
+    <!-- --------------------------------------------여기는 이용방법  -->
 
     <base-material-card
-      color="success"
-      dark
+      color="error"
       icon="mdi-clipboard-plus"
-      title="Table on Dark Background"
+      title="이용안내"
       class="px-5 py-3"
     >
       <v-simple-table>
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Country</th>
-            <th>City</th>
-            <th class="text-right">
-              Salary
+            <th class="text-center">
+              제목
+            </th>
+            <th class="text-center">
+              등록일
             </th>
           </tr>
         </thead>
-
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Dakota Rice</td>
-            <td>Niger</td>
-            <td>Oud-Turnhout</td>
-            <td class="text-right">
-              $36,738
-            </td>
+          <tr
+            v-for="(item, n) in tutorialList"
+            :key="n"
+            class="text-center"
+            @click="goDetail(item)"
+          >
+            <td>{{ item.title }}</td>
+            <td>{{ item.createdDate }}</td>
           </tr>
-
-          <tr>
-            <td>2</td>
-            <td>Minverva Hooper</td>
-            <td>Curaçao</td>
-            <td>Sinaas-Waas</td>
-            <td class="text-right">
-              $23,789
-            </td>
-          </tr>
-
-          <tr>
-            <td>3</td>
-            <td>Sage Rodriguez</td>
-            <td>Netherlands</td>
-            <td>Baileux</td>
-            <td class="text-right">
-              $56,142
-            </td>
-          </tr>
-
-          <tr>
-            <td>4</td>
-            <td>Philip Chaney</td>
-            <td>Korea, South</td>
-            <td>Overland Park</td>
-            <td class="text-right">
-              $38,735
-            </td>
-          </tr>
-
-          <tr>
-            <td>5</td>
-            <td>Doris Greene</td>
-            <td>Malawi</td>
-            <td>Feldkirchen in Kärnten</td>
-            <td class="text-right">
-              $63,542
-            </td>
-          </tr>
-
-          <tr>
-            <td>6</td>
-            <td>Mason Porter</td>
-            <td>Chile</td>
-            <td>Gloucester</td>
-            <td class="text-right">
-              $78,615
-            </td>
-          </tr>
+          <Notice-Detail
+            v-model="dialog"
+            :item="item"
+          />
         </tbody>
       </v-simple-table>
     </base-material-card>
   </v-container>
 </template>
+
+<script>
+  import NoticeAddForm from '@/views/dashboard/tables/NoticeCreate.vue'
+  import NoticeDetail from '@/views/dashboard/tables/NoticeDetail.vue'
+  export default {
+    components: {
+      'Notice-Add-Form': NoticeAddForm,
+      'Notice-Detail': NoticeDetail,
+    },
+    data: () => ({
+      noticeList: [],
+      tutorialList: [],
+      dialog: false,
+      item: Object,
+    }),
+    created () {
+      this.$axios.get(`${this.$SERVER_URL}/notice-service/notices`)
+        .then((res) => {
+          console.log('Notice Get Success!', res)
+          this.noticeList = res.data.filter(v => v.isImportant)
+          this.tutorialList = res.data.filter(v => !v.isImportant)
+        }).catch((err) => {
+          console.log('Notice Get Failed!', err)
+        })
+    },
+    methods: {
+      goDetail (item) {
+        this.dialog = true
+        this.item = item
+      },
+    },
+  }
+</script>
