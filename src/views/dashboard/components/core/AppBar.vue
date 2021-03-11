@@ -30,28 +30,6 @@
     />
 
     <v-spacer />
-    <!-- 헤더 : 검색 -->
-    <v-text-field
-      :label="$t('검색어를 입력해 주세요.')"
-      color="secondary"
-      hide-details
-      style="max-width: 300px;"
-    >
-      <template
-        v-if="$vuetify.breakpoint.mdAndUp"
-        v-slot:append-outer
-      >
-        <v-btn
-          class="mt-n2"
-          elevation="1"
-          fab
-          small
-        >
-          <v-icon>mdi-magnify</v-icon>
-        </v-btn>
-      </template>
-    </v-text-field>
-
     <div class="mx-3" />
 
     <v-btn

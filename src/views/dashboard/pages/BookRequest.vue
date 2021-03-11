@@ -4,185 +4,87 @@
     fluid
     tag="section"
   >
-    <base-v-component
-      heading="Simple Tables"
-      link="components/simple-tables"
-    />
-
-    <base-material-card
-      icon="mdi-clipboard-text"
-      title="Simple Table"
-      class="px-5 py-3"
-    >
-      <v-simple-table>
-        <thead>
-          <tr>
-            <th class="primary--text">
-              ID
-            </th>
-            <th class="primary--text">
-              Name
-            </th>
-            <th class="primary--text">
-              Country
-            </th>
-            <th class="primary--text">
-              City
-            </th>
-            <th class="text-right primary--text">
-              Salary
-            </th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>Dakota Rice</td>
-            <td>Niger</td>
-            <td>Oud-Turnhout</td>
-            <td class="text-right">
-              $36,738
-            </td>
-          </tr>
-
-          <tr>
-            <td>2</td>
-            <td>Minverva Hooper</td>
-            <td>Curaçao</td>
-            <td>Sinaas-Waas</td>
-            <td class="text-right">
-              $23,789
-            </td>
-          </tr>
-
-          <tr>
-            <td>3</td>
-            <td>Sage Rodriguez</td>
-            <td>Netherlands</td>
-            <td>Baileux</td>
-            <td class="text-right">
-              $56,142
-            </td>
-          </tr>
-
-          <tr>
-            <td>4</td>
-            <td>Philip Chaney</td>
-            <td>Korea, South</td>
-            <td>Overland Park</td>
-            <td class="text-right">
-              $38,735
-            </td>
-          </tr>
-
-          <tr>
-            <td>5</td>
-            <td>Doris Greene</td>
-            <td>Malawi</td>
-            <td>Feldkirchen in Kärnten</td>
-            <td class="text-right">
-              $63,542
-            </td>
-          </tr>
-
-          <tr>
-            <td>6</td>
-            <td>Mason Porter</td>
-            <td>Chile</td>
-            <td>Gloucester</td>
-            <td class="text-right">
-              $78,615
-            </td>
-          </tr>
-        </tbody>
-      </v-simple-table>
-    </base-material-card>
-
-    <div class="py-3" />
-
-    <base-material-card
-      color="success"
-      dark
-      icon="mdi-clipboard-plus"
-      title="Table on Dark Background"
-      class="px-5 py-3"
-    >
-      <v-simple-table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Country</th>
-            <th>City</th>
-            <th class="text-right">
-              Salary
-            </th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>Dakota Rice</td>
-            <td>Niger</td>
-            <td>Oud-Turnhout</td>
-            <td class="text-right">
-              $36,738
-            </td>
-          </tr>
-
-          <tr>
-            <td>2</td>
-            <td>Minverva Hooper</td>
-            <td>Curaçao</td>
-            <td>Sinaas-Waas</td>
-            <td class="text-right">
-              $23,789
-            </td>
-          </tr>
-
-          <tr>
-            <td>3</td>
-            <td>Sage Rodriguez</td>
-            <td>Netherlands</td>
-            <td>Baileux</td>
-            <td class="text-right">
-              $56,142
-            </td>
-          </tr>
-
-          <tr>
-            <td>4</td>
-            <td>Philip Chaney</td>
-            <td>Korea, South</td>
-            <td>Overland Park</td>
-            <td class="text-right">
-              $38,735
-            </td>
-          </tr>
-
-          <tr>
-            <td>5</td>
-            <td>Doris Greene</td>
-            <td>Malawi</td>
-            <td>Feldkirchen in Kärnten</td>
-            <td class="text-right">
-              $63,542
-            </td>
-          </tr>
-
-          <tr>
-            <td>6</td>
-            <td>Mason Porter</td>
-            <td>Chile</td>
-            <td>Gloucester</td>
-            <td class="text-right">
-              $78,615
-            </td>
-          </tr>
-        </tbody>
-      </v-simple-table>
-    </base-material-card>
+    <v-row justify="center">
+      <v-col
+        cols="12"
+        md="4"
+      >
+        <v-card-text>
+          <v-autocomplete
+            v-model="modal"
+            :items="entity"
+            :loading="isLoading"
+            :search-input.sync="search"
+            clearable
+            label="신청할 도서를 찾아보세요."
+            color="secondary"
+            hide-selected
+            item-text="title"
+            item-value="title"
+            placeholder="검색어를 입력하세요."
+            prepend-icon="mdi-book-open-page-variant"
+            return-object
+            @keyup.enter="find"
+          />
+        </v-card-text>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
+
+<script>
+  import debounce from 'debounce'
+  export default {
+    data: () => ({
+      items: [],
+      isLoading: false,
+      modal: null,
+      search: null,
+      resultbooks: [],
+    }),
+    computed: {
+      entity () {
+        return this.items.map(item => {
+          const title = item.title.replace(/(<([^>]+)>)/ig, '')
+          return Object.assign({}, item, { title })
+        })
+      },
+    },
+    watch: {
+      search (value) {
+        if (!value || value.replace(/^\s+|\s+$/g, '') === '') return
+
+        debounce(this.makeSearch, 400)(value, this)
+      },
+    },
+    methods: {
+      async makeSearch (value, self) {
+        if (!value) {
+          self.items = []
+          self.modal = null
+        }
+
+        if (self.isLoading) return
+
+        self.isLoading = true
+
+        try {
+          const { data } = await this.$axios.get(`http://localhost:8008/request-list/${value}`)
+          self.total = data.total
+          self.items = data.items
+          self.isLoading = false
+        } catch (error) {
+          console.log(error.message)
+        }
+      },
+      async find () {
+        if (this.modal && this.search) { // 선택해서 Enter 눌렀을 때
+          this.resultbooks = this.modal
+        } else { // 그냥 검색어 Enter 눌렀을 때
+          const { data } = await this.$axios.get(`http://localhost:8008/request-list/${this.search}`)
+          console.log(data)
+        }
+      },
+    },
+  }
+</script>
