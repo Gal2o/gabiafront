@@ -1,0 +1,36 @@
+@import '../custom/app';
+
+.error-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: $text-color;
+  .card {
+    padding: 0 50px;
+    background-color: white;
+    border-radius: 4px;
+    height: 680px;
+    
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-around;
+    .error-logo {
+      color: $error;
+      font-size: 148px;
+      font-weight: 600;
+    }
+    .error-text {
+      color: $text-grey;
+      text-align: center;
+      font-size: $h3-font-size;
+    }
+    .error-subtext {
+      text-align: center;
+      color: $text-grey;
+      font-size: $h4-font-size;
+    }
+  }
+}

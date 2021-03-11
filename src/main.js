@@ -14,14 +14,17 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-import store from './store'
+import store from './store/store'
 import './plugins/base'
 import './plugins/chartist'
 import './plugins/vee-validate'
 import vuetify from './plugins/vuetify'
 import i18n from './i18n'
-
+import axios from 'axios'
 Vue.config.productionTip = false
+Vue.prototype.$axios = axios
+const SERVER_URL = 'http://localhost:8762'
+Vue.prototype.$SERVER_URL = SERVER_URL
 
 new Vue({
   router,

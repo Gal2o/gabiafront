@@ -23,7 +23,8 @@
       expand
       nav
     >
-      <v-list-item> <!-- 바 : 로고, 제목 부분 -->
+      <v-list-item>
+        <!-- 바 : 로고, 제목 부분 -->
         <v-list-item-avatar
           class="align-self-center"
           color="white"
@@ -37,7 +38,7 @@
 
         <v-list-item-content>
           <v-list-item-title
-            class="display-2"
+            class="text-h3"
             v-text="profile.title"
           />
         </v-list-item-content>
@@ -73,13 +74,13 @@
     <template v-slot:append>
       <base-item
         :item="{
-          title: $t('로그 아웃'),
+          title: $t('로그아웃'),
           icon: 'mdi-logout-variant',
-          to: '/logout',
+          to: '/logout'
         }"
+        @click.native="logout"
       />
     </template>
-
   </v-navigation-drawer>
 </template>
 
@@ -88,7 +89,7 @@
   import {
     mapState,
   } from 'vuex'
-
+  import { deleteCookie } from '@/util/cookies'
   export default {
     name: 'DashboardCoreDrawer',
 
@@ -156,6 +157,17 @@
           children: item.children ? item.children.map(this.mapItem) : undefined,
           title: this.$t(item.title),
         }
+      },
+      logout () {
+        this.$store.commit('CLEAR_USERID')
+        this.$store.commit('CLEAR_ACCESS_TOKEN')
+        this.$store.commit('CLEAR_ROLE')
+        this.$store.commit('CLEAR_USERNUM')
+        deleteCookie('auth')
+        deleteCookie('userId')
+        deleteCookie('role')
+        deleteCookie('userNum')
+        this.$router.push('/login')
       },
     },
   }

@@ -13,38 +13,38 @@
           hide-delimiters
         >
           <v-carousel-item
-            v-for="last in latest"
-            :key="last"
+            v-for="(last, l) in latest"
+            :key="l"
           >
             <v-row>
-                <v-card
-                  class="mx-auto"
-                  max-width="344"
-                >
-                  <v-img
-                    :src="last.src"
-                  ></v-img>
-                  <v-card-title> 책 제목 </v-card-title>
-                  <v-card-subtitle>
-                    <v-rating
-                        :value="3.1"
-                        color="amber"
-                        dense
-                        readonly
-                        size="13"
-                      ></v-rating>
+              <v-card
+                class="mx-auto"
+                max-width="344"
+              >
+                <v-img
+                  :src="last.src"
+                />
+                <v-card-title> 책 제목 </v-card-title>
+                <v-card-subtitle>
+                  <v-rating
+                    :value="3.1"
+                    color="amber"
+                    dense
+                    readonly
+                    size="13"
+                  />
 
-                      <div class="white--text ml-4">
-                        3.1 (413)
-                      </div>
-                  </v-card-subtitle>
-                </v-card>
+                  <div class="white--text ml-4">
+                    3.1 (413)
+                  </div>
+                </v-card-subtitle>
+              </v-card>
             </v-row>
           </v-carousel-item>
         </v-carousel>
       </v-col>
 
-       <v-col
+      <v-col
         cols="12"
         lg="12"
       >
@@ -52,32 +52,32 @@
           hide-delimiters
         >
           <v-carousel-item
-            v-for="r in review"
+            v-for="(review, r) in reviews"
             :key="r"
           >
             <v-row>
-                <v-card
-                  class="mx-auto"
-                  max-width="344"
-                >
-                  <v-img
-                    :src="r.src"
-                  ></v-img>
-                  <v-card-title> 책 제목 </v-card-title>
-                  <v-card-subtitle>
-                    <v-rating
-                        :value="4.1"
-                        color="amber"
-                        dense
-                        readonly
-                        size="13"
-                      ></v-rating>
+              <v-card
+                class="mx-auto"
+                max-width="344"
+              >
+                <v-img
+                  :src="review.src"
+                />
+                <v-card-title> 책 제목이다. </v-card-title>
+                <v-card-subtitle>
+                  <v-rating
+                    :value="4.1"
+                    color="amber"
+                    dense
+                    readonly
+                    size="13"
+                  />
 
-                      <div class="white--text ml-4">
-                        4.1 (200)
-                      </div>
-                  </v-card-subtitle>
-                </v-card>
+                  <div class="white--text ml-4">
+                    4.1 (200)
+                  </div>
+                </v-card-subtitle>
+              </v-card>
             </v-row>
           </v-carousel-item>
         </v-carousel>
@@ -118,7 +118,7 @@
             src: 'http://image.yes24.com/goods/67883315/L',
           },
         ],
-        review: [
+        reviews: [
           {
             src: 'http://image.yes24.com/goods/93765519/L',
           },

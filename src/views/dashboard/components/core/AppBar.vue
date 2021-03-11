@@ -15,7 +15,7 @@
       small
       @click="setDrawer(!drawer)"
     >
-      <v-icon v-if="drawer"> <!--props.value 인식 X -> drawer로 수정-->
+      <v-icon v-if="drawer">
         mdi-menu-left-outline
       </v-icon>
 
@@ -26,7 +26,7 @@
 
     <v-toolbar-title
       class="hidden-sm-and-down font-weight-light"
-      v-text="$route.meta"
+      v-text="$route.meta.name"
     />
 
     <v-spacer />
@@ -68,8 +68,8 @@
       class="ml-2"
       min-width="0"
       text
-      >
-    <v-icon>mdi-cog</v-icon>
+    >
+      <v-icon>mdi-cog</v-icon>
     </v-btn>
 
     <v-menu
@@ -94,7 +94,7 @@
             bordered
           >
             <template v-slot:badge>
-              <span>{{notifications.length}}</span>
+              <span>{{ notifications.length }}</span>
             </template>
 
             <v-icon>mdi-bell</v-icon>
