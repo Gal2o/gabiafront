@@ -4,6 +4,10 @@
     fluid
     tag="section"
   >
+    <Book-Request-Edit
+      v-if="this.$store.state.role.includes('ADMIN') === false"
+    />
+
     <v-row justify="center">
       <v-col
         cols="12"
@@ -29,18 +33,62 @@
         </v-card-text>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col
+        cols="12"
+        md="3"
+        v-for="(item, n) in bookList"
+        :key="n"
+      >
+        <v-card
+          class="mx-auto"
+          @click="goBookDetail(item)"
+        >
+          <v-img
+            :src="`${ item.image }`"
+          ></v-img>
+          <v-card-text
+            align="center"
+            v-html="item.title.replace(/(<([^>]+)>)/ig, '')"
+          />
+        </v-card>
+      </v-col>
+      <Book-Request-Detail
+        v-model="dialog"
+        :item="books"
+      />
+    </v-row>
+    <div class="text-center">
+      <v-pagination
+        v-model="pagecurrent"
+        :length="pagetotal"
+        v-if="pagetotal > 0"
+        :total-visible="10"
+        @input="pageChange"
+      />
+    </div>
   </v-container>
 </template>
 
 <script>
   import debounce from 'debounce'
+  import BookRequestDetail from '@/views/dashboard/tables/BookRequestDetail.vue'
+  import BookRequestEdit from '@/views/dashboard/tables/BookRequestEdit.vue'
   export default {
+    components: {
+      'Book-Request-Detail': BookRequestDetail,
+      'Book-Request-Edit': BookRequestEdit,
+    },
     data: () => ({
       items: [],
       isLoading: false,
       modal: null,
       search: null,
-      resultbooks: [],
+      bookList: [],
+      dialog: false,
+      books: [],
+      pagecurrent: 1,
+      pagetotal: '',
     }),
     computed: {
       entity () {
@@ -69,21 +117,31 @@
         self.isLoading = true
 
         try {
-          const { data } = await this.$axios.get(`http://localhost:8008/request-list/${value}`)
-          self.total = data.total
+          const { data } = await this.$axios.get(`http://localhost:8008/request-list/${value}`, {
+            params: {
+              page: 1,
+            },
+          })
           self.items = data.items
           self.isLoading = false
         } catch (error) {
           console.log(error.message)
         }
       },
-      async find () {
-        if (this.modal && this.search) { // 선택해서 Enter 눌렀을 때
-          this.resultbooks = this.modal
-        } else { // 그냥 검색어 Enter 눌렀을 때
-          const { data } = await this.$axios.get(`http://localhost:8008/request-list/${this.search}`)
-          console.log(data)
-        }
+      async find () {// 선택해서 Enter 눌렀을 때
+        const { data } = await this.$axios.get(`http://localhost:8008/request-list/${this.search}`, {
+          params: {
+            page: 1,
+          },
+        })
+        console.log(data)
+        this.bookList = data.items
+        this.pagecurrent = data.start
+        this.pagetotal = Math.ceil(data.total / 12)
+      },
+      goBookDetail (item) {
+        this.dialog = true
+        this.books = item
       },
     },
   }
