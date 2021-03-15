@@ -23,7 +23,7 @@ import i18n from './i18n'
 import axios from 'axios'
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios
-const SERVER_URL = 'http://localhost:8762'
+const SERVER_URL = 'http://139.150.76.156:8001'
 Vue.prototype.$SERVER_URL = SERVER_URL
 
 new Vue({
