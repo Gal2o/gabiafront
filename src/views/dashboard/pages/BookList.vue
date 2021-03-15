@@ -1,188 +1,108 @@
 <template>
   <v-container
-    id="regular-tables"
+    id="alerts"
     fluid
     tag="section"
   >
-    <base-v-component
-      heading="Simple Tables"
-      link="components/simple-tables"
-    />
+    <v-row>
+      <v-col
+        cols="12"
+        md="3"
+        v-for="b in books" :key="b.id"
+      >
+        <v-card
+          class="mx-auto"
+          max-width="344"
+        >
+          <v-img
+            :src="`${ b.thumbnail }`"
+          ></v-img>
+          <v-card-title>{{ b.title }}</v-card-title>
+          <v-card-text>
+            <v-row
+              align="center"
+              class="mx-0"
+            >
+              <v-rating
+                v-model=b.avgReviewRating
+                color="amber"
+                dense
+                half-increments
+                readonly
+                size="14"
+              ></v-rating>
 
-    <base-material-card
-      icon="mdi-clipboard-text"
-      title="Simple Table"
-      class="px-5 py-3"
-    >
-      <v-simple-table>
-        <thead>
-          <tr>
-            <th class="primary--text">
-              ID
-            </th>
-            <th class="primary--text">
-              Name
-            </th>
-            <th class="primary--text">
-              Country
-            </th>
-            <th class="primary--text">
-              City
-            </th>
-            <th class="text-right primary--text">
-              Salary
-            </th>
-          </tr>
-        </thead>
+              <div class="grey--text ml-4">
+                {{ b.avgReviewRating }} ({{ b.reviewCount }})
+              </div>
 
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>Dakota Rice</td>
-            <td>Niger</td>
-            <td>Oud-Turnhout</td>
-            <td class="text-right">
-              $36,738
-            </td>
-          </tr>
+              <div class="my-4 subtitle-1" v-if="b.rent === true">
+                대출중 ({{ b.identifier }})
+              </div>
+              <div class="my-4 subtitle-1" v-else>
+                대출가능
+              </div>
 
-          <tr>
-            <td>2</td>
-            <td>Minverva Hooper</td>
-            <td>Curaçao</td>
-            <td>Sinaas-Waas</td>
-            <td class="text-right">
-              $23,789
-            </td>
-          </tr>
+            </v-row>
+          </v-card-text>
 
-          <tr>
-            <td>3</td>
-            <td>Sage Rodriguez</td>
-            <td>Netherlands</td>
-            <td>Baileux</td>
-            <td class="text-right">
-              $56,142
-            </td>
-          </tr>
-
-          <tr>
-            <td>4</td>
-            <td>Philip Chaney</td>
-            <td>Korea, South</td>
-            <td>Overland Park</td>
-            <td class="text-right">
-              $38,735
-            </td>
-          </tr>
-
-          <tr>
-            <td>5</td>
-            <td>Doris Greene</td>
-            <td>Malawi</td>
-            <td>Feldkirchen in Kärnten</td>
-            <td class="text-right">
-              $63,542
-            </td>
-          </tr>
-
-          <tr>
-            <td>6</td>
-            <td>Mason Porter</td>
-            <td>Chile</td>
-            <td>Gloucester</td>
-            <td class="text-right">
-              $78,615
-            </td>
-          </tr>
-        </tbody>
-      </v-simple-table>
-    </base-material-card>
-
-    <div class="py-3" />
-
-    <base-material-card
-      color="success"
-      dark
-      icon="mdi-clipboard-plus"
-      title="Table on Dark Background"
-      class="px-5 py-3"
-    >
-      <v-simple-table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Country</th>
-            <th>City</th>
-            <th class="text-right">
-              Salary
-            </th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>Dakota Rice</td>
-            <td>Niger</td>
-            <td>Oud-Turnhout</td>
-            <td class="text-right">
-              $36,738
-            </td>
-          </tr>
-
-          <tr>
-            <td>2</td>
-            <td>Minverva Hooper</td>
-            <td>Curaçao</td>
-            <td>Sinaas-Waas</td>
-            <td class="text-right">
-              $23,789
-            </td>
-          </tr>
-
-          <tr>
-            <td>3</td>
-            <td>Sage Rodriguez</td>
-            <td>Netherlands</td>
-            <td>Baileux</td>
-            <td class="text-right">
-              $56,142
-            </td>
-          </tr>
-
-          <tr>
-            <td>4</td>
-            <td>Philip Chaney</td>
-            <td>Korea, South</td>
-            <td>Overland Park</td>
-            <td class="text-right">
-              $38,735
-            </td>
-          </tr>
-
-          <tr>
-            <td>5</td>
-            <td>Doris Greene</td>
-            <td>Malawi</td>
-            <td>Feldkirchen in Kärnten</td>
-            <td class="text-right">
-              $63,542
-            </td>
-          </tr>
-
-          <tr>
-            <td>6</td>
-            <td>Mason Porter</td>
-            <td>Chile</td>
-            <td>Gloucester</td>
-            <td class="text-right">
-              $78,615
-            </td>
-          </tr>
-        </tbody>
-      </v-simple-table>
-    </base-material-card>
+          <v-divider class="mx-4"></v-divider>
+          <v-btn @click="getDetails(b.id)">상세보기</v-btn>
+        </v-card>
+      </v-col>
+    </v-row>
+    <div class="text-center">
+      <v-pagination
+        v-model="pagination.page"
+        :length="pagination.totalPage"
+        :total-visible="7"
+        @input="onPageChange"
+      ></v-pagination>
+    </div>
   </v-container>
 </template>
+
+<script>
+  import router from "@/router";
+
+  export default {
+    data() {
+      return {
+        books: [],
+        rendData: [],
+        pagination: {}
+      }
+    },
+    created() {
+      this.fetchData()
+    },
+    methods: {
+      async fetchData () {
+        try {
+          await this.$axios.get(`${this.$SERVER_URL}/book-service/books`)
+          .then((res) => {
+            this.books = res.data.responseDtoList
+            this.pagination = res.data.pageResponseData
+          })
+        } catch (error) {
+          alert(error.response.data.message)
+        }
+      },
+      async onPageChange(newPage) {
+        try {
+          await this.$axios.get(`${this.$SERVER_URL}/book-service/books?page=` + newPage)
+          .then((res) => {
+            this.books = res.data.responseDtoList
+            this.pagination = res.data.pageResponseData
+          })
+        } catch (error) {
+          alert(error.response.data.message)
+        }
+      },
+      getDetails(val) {
+        router.push({ path: '/pages/BookDetails', query: { id: val }})
+      }
+    }
+  }
+
+</script>
