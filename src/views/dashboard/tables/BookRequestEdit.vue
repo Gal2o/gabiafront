@@ -79,8 +79,8 @@
     created () {
       this.$axios.get(`http://localhost:8008/request-list`)
         .then((res) => {
-          console.log('RequestList Get Success', res)
           this.requestList = res.data.filter(v => !v.deleted && v.status === "REQUESTED")
+          console.log('RequestList Get Success', this.requestList)
         }).catch((err) => {
           console.log('RequestList Get Failed', err)
         })

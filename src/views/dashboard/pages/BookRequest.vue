@@ -89,11 +89,13 @@
       books: [],
       pagecurrent: 1,
       pagetotal: '',
+      pagetitle: '',
     }),
     computed: {
       entity () {
         return this.items.map(item => {
-          const title = item.title.replace(/(<([^>]+)>)/ig, '')
+          const title = item.title.length > 40 
+          ? item.title.slice(0, 40).replace(/(<([^>]+)>)/ig, '') + '...' : item.title.replace(/(<([^>]+)>)/ig, '')
           return Object.assign({}, item, { title })
         })
       },
@@ -128,16 +130,31 @@
           console.log(error.message)
         }
       },
-      async find () {// 선택해서 Enter 눌렀을 때
+      async find () {// 처음 선택해서 Enter 눌렀을 때
+        if(this.search === null)
+          this.search = ''
+          
         const { data } = await this.$axios.get(`http://localhost:8008/request-list/${this.search}`, {
-          params: {
-            page: 1,
-          },
+          params: { page: 1, },
         })
-        console.log(data)
+
         this.bookList = data.items
         this.pagecurrent = data.start
-        this.pagetotal = Math.ceil(data.total / 12)
+        data.total > 1000 ? this.pagetotal = Math.ceil(1000 / 12) : this.pagetotal = Math.ceil(data.total / 12)
+        this.pagetitle = this.search
+      },
+      async pageChange (value) {
+        if(this.pagetitle === null)
+          this.pagetitle = ''
+
+        const start = value === 1 ? 1 : (value - 1) * 12
+        
+        const { data } = await this.$axios.get(`http://localhost:8008/request-list/${this.pagetitle}`, {
+          params: { page: start, },
+        })
+        
+        this.bookList = data.items
+        this.pagecurrent = value
       },
       goBookDetail (item) {
         this.dialog = true
