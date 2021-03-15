@@ -236,16 +236,16 @@
     methods: {
       async login () {
         try {
-          const { headers } = await this.$axios.post(`${this.$SERVER_URL}/auth`, {
+          const { headers } = await this.$axios.post(`${this.$SERVER_URL}/auth-service/auth`, {
             identifier: this.identifier,
             password: this.password,
           })
           console.log('axios Post Success', headers)
-          this.$store.commit('SET_ACCESS_TOKEN', headers.authorization)
+          this.$store.commit('SET_ACCESS_TOKEN', headers.token)
           this.$store.commit('SET_USERID', this.identifier)
           this.$store.commit('SET_ROLE', headers.authority)
           this.$store.commit('SET_USERNUM', headers.id)
-          saveAuthToCookie(headers.authorization)
+          saveAuthToCookie(headers.token)
           saveUserIdToCookie(this.identifier)
           saveRoleToCookie(headers.authority)
           saveUserNumToCookie(headers.id)
