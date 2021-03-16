@@ -48,6 +48,12 @@ const router = new VueRouter({
           component: () => import('@/views/dashboard/pages/BookRequest'),
           meta: { name: '도서신청', auth: false },
         },
+        {
+          name: 'BookDetails',
+          path: 'pages/BookDetails',
+          component: () => import('@/views/dashboard/pages/BookDetails'),
+          meta: { name: '도서상세', auth: true },
+        },
       ],
     },
     {
