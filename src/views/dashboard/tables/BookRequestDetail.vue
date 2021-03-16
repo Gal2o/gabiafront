@@ -80,6 +80,10 @@
               author: this.item.author,
               destination: this.select.value,
               url: this.item.link,
+              thumbnail: this.item.image,
+              publisher: this.item.publisher,
+              publishDate: this.item.pubdate,
+              content: this.item.description,
               status: 'REQUESTED',
             }, {
               headers: {
