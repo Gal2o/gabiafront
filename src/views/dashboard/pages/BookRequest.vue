@@ -5,7 +5,7 @@
     tag="section"
   >
     <Book-Request-Edit
-      v-if="this.$store.state.role.includes('ADMIN') === false"
+      v-if="this.$store.state.role.includes('ADMIN') === true"
     />
 
     <v-row justify="center">
@@ -35,10 +35,10 @@
     </v-row>
     <v-row>
       <v-col
-        cols="12"
-        md="3"
         v-for="(item, n) in bookList"
         :key="n"
+        cols="12"
+        md="3"
       >
         <v-card
           class="mx-auto"
@@ -46,7 +46,7 @@
         >
           <v-img
             :src="`${ item.image }`"
-          ></v-img>
+          />
           <v-card-text
             align="center"
             v-html="item.title.replace(/(<([^>]+)>)/ig, '')"
@@ -60,9 +60,9 @@
     </v-row>
     <div class="text-center">
       <v-pagination
+        v-if="pagetotal > 0"
         v-model="pagecurrent"
         :length="pagetotal"
-        v-if="pagetotal > 0"
         :total-visible="10"
         @input="pageChange"
       />
@@ -94,8 +94,8 @@
     computed: {
       entity () {
         return this.items.map(item => {
-          const title = item.title.length > 40 
-          ? item.title.slice(0, 40).replace(/(<([^>]+)>)/ig, '') + '...' : item.title.replace(/(<([^>]+)>)/ig, '')
+          const title = item.title.length > 40
+            ? item.title.slice(0, 40).replace(/(<([^>]+)>)/ig, '') + '...' : item.title.replace(/(<([^>]+)>)/ig, '')
           return Object.assign({}, item, { title })
         })
       },
@@ -119,7 +119,10 @@
         self.isLoading = true
 
         try {
-          const { data } = await this.$axios.get(`http://localhost:8008/request-list/${value}`, {
+          const { data } = await this.$axios.get(`${this.$SERVER_URL}/book-request-service/request-list/${value}`, {
+            headers: {
+              Token: this.$Token
+            },
             params: {
               page: 1,
             },
@@ -130,12 +133,18 @@
           console.log(error.message)
         }
       },
-      async find () {// 처음 선택해서 Enter 눌렀을 때
-        if(this.search === null)
+      async find () { // 처음 선택해서 Enter 눌렀을 때
+        if (this.search === null) {
           this.search = ''
-          
-        const { data } = await this.$axios.get(`http://localhost:8008/request-list/${this.search}`, {
-          params: { page: 1, },
+        }
+
+        const { data } = await this.$axios.get(`${this.$SERVER_URL}/book-request-service/request-list/${this.search}`, {
+          headers: {
+            Token: this.$Token
+          },
+          params: { 
+            page: 1 
+          },
         })
 
         this.bookList = data.items
@@ -144,15 +153,21 @@
         this.pagetitle = this.search
       },
       async pageChange (value) {
-        if(this.pagetitle === null)
+        if (this.pagetitle === null) {
           this.pagetitle = ''
+        }
 
         const start = value === 1 ? 1 : (value - 1) * 12
-        
-        const { data } = await this.$axios.get(`http://localhost:8008/request-list/${this.pagetitle}`, {
-          params: { page: start, },
+
+        const { data } = await this.$axios.get(`${this.$SERVER_URL}/book-request-service/request-list/${this.pagetitle}`, {
+          headers: {
+            Token: this.$Token
+          },
+          params: {
+            page: start
+          },
         })
-        
+
         this.bookList = data.items
         this.pagecurrent = value
       },

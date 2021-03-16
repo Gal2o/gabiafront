@@ -1,150 +1,120 @@
 <template>
   <v-container
     id="dashboard"
-    fluid
     tag="section"
   >
+    <v-divider class="mx-4" />
     <v-row>
+      <v-spacer />
+      <v-col cols="2">
+        <v-select
+          v-model="select"
+          :items="items"
+          item-text="state"
+          item-value="value"
+          return-object
+          @input="fetchData"
+        />
+      </v-col>
+      <v-spacer />
       <v-col
         cols="12"
         lg="12"
       >
-        <v-carousel
-          hide-delimiters
+        <carousel-3d
+          ref="firstpage"
+          autoplay
+          autoplayHoverPause
+          display="7"
+          border="3"
+          space="300"
+          height="460"
+          :count="bookList.length"
         >
-          <v-carousel-item
-            v-for="(last, l) in latest"
-            :key="l"
+          <slide
+            v-for="(slide, i) in bookList"
+            :index="i"
+            :key="i"
           >
-            <v-row>
-              <v-card
-                class="mx-auto"
-                max-width="344"
-              >
+            <v-hover>
+              <template v-slot="{ index, isCurrent, leftIndex, rightIndex, hover }">
                 <v-img
-                  :src="last.src"
-                />
-                <v-card-title> 책 제목 </v-card-title>
-                <v-card-subtitle>
-                  <v-rating
-                    :value="3.1"
-                    color="amber"
-                    dense
-                    readonly
-                    size="13"
-                  />
-
-                  <div class="white--text ml-4">
-                    3.1 (413)
-                  </div>
-                </v-card-subtitle>
-              </v-card>
-            </v-row>
-          </v-carousel-item>
-        </v-carousel>
+                  :class="{ current: isCurrent, onLeft: (leftIndex >= 0), onRight: (rightIndex >= 0) }"
+                  :data-index="index"
+                  :src="slide.thumbnail"
+                >
+                  <v-fade-transition>
+                    <v-overlay
+                      v-if="hover"
+                      absolute
+                      color="#F2F2F2"
+                    >
+                      <v-card-text v-if="select.value === 'latest'">
+                        추가 된 날: {{slide.createdDate}}
+                      </v-card-text>
+                      <v-card-text v-else>
+                        리뷰 수: {{slide.reviewCount}}
+                      </v-card-text>
+                      <v-btn
+                        color="warning"
+                        @click="getDetails(slide.id)"
+                        block
+                      >
+                        책 상세보기
+                      </v-btn>
+                    </v-overlay>
+                  </v-fade-transition>
+                </v-img>
+              </template>
+            </v-hover>
+          </slide>
+        </carousel-3d>
       </v-col>
-
-      <v-col
-        cols="12"
-        lg="12"
-      >
-        <v-carousel
-          hide-delimiters
-        >
-          <v-carousel-item
-            v-for="(review, r) in reviews"
-            :key="r"
-          >
-            <v-row>
-              <v-card
-                class="mx-auto"
-                max-width="344"
-              >
-                <v-img
-                  :src="review.src"
-                />
-                <v-card-title> 책 제목이다. </v-card-title>
-                <v-card-subtitle>
-                  <v-rating
-                    :value="4.1"
-                    color="amber"
-                    dense
-                    readonly
-                    size="13"
-                  />
-
-                  <div class="white--text ml-4">
-                    4.1 (200)
-                  </div>
-                </v-card-subtitle>
-              </v-card>
-            </v-row>
-          </v-carousel-item>
-        </v-carousel>
-      </v-col>
+      <v-spacer />
     </v-row>
   </v-container>
 </template>
 
 <script>
+  import { Carousel3d, Slide } from 'vue-carousel-3d'
   export default {
     name: 'DashboardDashboard',
-
+    components: {
+      Carousel3d,
+      Slide,
+    },
+    created () {
+      this.fetchData ()
+    },
+    updated () {
+      this.$refs.firstpage.goSlide(this.$refs.firstpage.currentIndex)
+    },
     data () {
       return {
-        latest: [
-          {
-            src: 'http://image.yes24.com/goods/91433923/L',
-          },
-          {
-            src: 'http://image.yes24.com/goods/74269921/L',
-          },
-          {
-            src: 'http://image.yes24.com/goods/4333686/L',
-          },
-          {
-            src: 'http://image.yes24.com/goods/91084402/L',
-          },
-          {
-            src: 'http://image.yes24.com/goods/90452827/L',
-          },
-          {
-            src: 'http://image.yes24.com/goods/92363588/L',
-          },
-          {
-            src: 'http://image.yes24.com/goods/91302724/L',
-          },
-          {
-            src: 'http://image.yes24.com/goods/67883315/L',
-          },
-        ],
-        reviews: [
-          {
-            src: 'http://image.yes24.com/goods/93765519/L',
-          },
-          {
-            src: 'http://image.yes24.com/goods/78233628/L',
-          },
-          {
-            src: 'http://image.yes24.com/goods/91213376/L',
-          },
-          {
-            src: 'http://image.yes24.com/goods/96360166/L',
-          },
-          {
-            src: 'http://image.yes24.com/goods/19040233/L',
-          },
-          {
-            src: 'http://image.yes24.com/goods/78233628/L',
-          },
-          {
-            src: 'http://image.yes24.com/goods/90003539/L',
-          },
-          {
-            src: 'http://image.yes24.com/goods/72274740/L',
-          },
+        bookList: [],
+        select: { state: '최근 추가된 순' , value: 'latest' },
+        items: [
+          { state: '최근 추가된 순' , value: 'latest' },
+          { state: '리뷰 가장 많은 순', value: 'many-reviews' },
         ],
       }
+    },
+    methods: {
+      async fetchData () {
+        try {
+          const { data } = await this.$axios.get(`${this.$SERVER_URL}/book-service/books/${this.select.value}`, {
+            headers: {
+              Token: this.$Token
+            },
+          })
+          this.bookList = data
+        } catch (error) {
+          alert(error.message)
+        }
+      },
+      getDetails (val) {
+        this.$router.push({ name: 'BookDetails', query: { id: val }})
+      },
     },
   }
 </script>

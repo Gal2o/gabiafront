@@ -117,6 +117,10 @@
             title: data.title,
             content: data.textbox,
             isImportant: data.isImportant,
+          }, {
+            headers: {
+              Token: this.$Token
+            },
           })
           location.reload()
         } catch (error) {

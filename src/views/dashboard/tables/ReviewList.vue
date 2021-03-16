@@ -231,7 +231,6 @@
 </template>
 
 <script>
-import {getAuthFromCookie} from "@/util/cookies";
 import {onUnauthorized, UNAUTHORIZED} from "@/api";
 
 export default {
@@ -280,7 +279,11 @@ export default {
   methods: {
     async fetchReviewsOfBook() {
       try {
-        await this.$axios.get(`${this.$SERVER_URL}/review-service/books/${this.bookId}/reviews`)
+        await this.$axios.get(`${this.$SERVER_URL}/review-service/books/${this.bookId}/reviews`, {
+          headers: {
+            Token: this.$Token
+          },
+        })
           .then((res) => {
             this.reviews = res.data.responseDtoList
             this.pagination = res.data.pageResponseData
@@ -293,7 +296,11 @@ export default {
     },
     async fetchReviewsWithPage(newPage) {
       try {
-        await this.$axios.get(`${this.$SERVER_URL}/review-service/books/${this.bookId}/reviews?page=` + newPage)
+        await this.$axios.get(`${this.$SERVER_URL}/review-service/books/${this.bookId}/reviews?page=` + newPage, {
+          headers: {
+            Token: this.$Token
+          },
+        })
         .then((res) => {
           this.reviews = res.data.responseDtoList
           this.pagination = res.data.pageResponseData
@@ -308,8 +315,10 @@ export default {
            title: this.title,
            rating: this.rating,
            content: this.textbox,
-         }, { headers: {
-            Token: getAuthFromCookie(),}
+         }, { 
+           headers: {
+            Token: this.$Token
+          },
         })
         alert("review가 추가되었습니다.")
         await this.fetchReviewsWithPage(1)
@@ -325,7 +334,11 @@ export default {
     async getReviewDetails(reviewId) {
       try {
         this.detailsdialog = true;
-        await this.$axios.get(`${this.$SERVER_URL}/review-service/books/reviews/` + reviewId)
+        await this.$axios.get(`${this.$SERVER_URL}/review-service/books/reviews/` + reviewId, {
+          headers: {
+            Token: this.$Token
+          },
+        })
         .then((res) => {
           this.reviewDetails = res.data
         })

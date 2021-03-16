@@ -79,7 +79,11 @@
     methods: {
       async fetchData () {
         try {
-          await this.$axios.get(`${this.$SERVER_URL}/book-service/books`)
+          await this.$axios.get(`${this.$SERVER_URL}/book-service/books`, {
+            headers: {
+              Token: this.$Token
+            },
+          })
           .then((res) => {
             this.books = res.data.responseDtoList
             this.pagination = res.data.pageResponseData
