@@ -7,29 +7,6 @@
     <v-row justify="center">
       <v-col
         cols="12"
-        md="4"
-      >
-        <base-material-card
-          class="v-card-profile"
-          avatar="https://opgg-static.akamaized.net/images/lol/champion/Galio.png?image=q_auto,w_200&v=1591083841"
-        >
-          <v-card-text class="text-center">
-            <h6 class="display-1 mb-1 grey--text">
-              인턴
-            </h6>
-
-            <h4 class="display-2 font-weight-light mb-3 black--text">
-              Matt
-            </h4>
-
-            <p class="font-weight-light grey--text">
-              안녕하세요 인턴입니다.
-            </p>
-          </v-card-text>
-        </base-material-card>
-      </v-col>
-      <v-col
-        cols="12"
         md="8"
       >
         <base-material-card>
@@ -202,6 +179,10 @@
             email: this.updateEmail,
             password: this.updatePassword,
             phone: this.updatePhone.replace(/-/g, ''),
+          }, {
+            headers: {
+              Token: this.$Token
+            },
           })
         } catch (error) {
           console.log(error.message)
@@ -209,7 +190,11 @@
       },
       async remove () {
         try {
-          await this.$axios.delete(`${this.$SERVER_URL}/user-service/users/${getUserNumFromCookie()}`)
+          await this.$axios.delete(`${this.$SERVER_URL}/user-service/users/${getUserNumFromCookie()}`, {
+            headers: {
+              Token: this.$Token
+            },
+          })
           this.$store.commit('CLEAR_USERID')
           this.$store.commit('CLEAR_ACCESS_TOKEN')
           this.$store.commit('CLEAR_ROLE')

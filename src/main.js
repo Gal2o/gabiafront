@@ -21,8 +21,10 @@ import './plugins/vee-validate'
 import vuetify from './plugins/vuetify'
 import i18n from './i18n'
 import axios from 'axios'
+import { getAuthFromCookie } from '@/util/cookies'
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios
+Vue.prototype.$Token = getAuthFromCookie()
 const SERVER_URL = 'http://139.150.76.156:8001'
 Vue.prototype.$SERVER_URL = SERVER_URL
 

@@ -100,8 +100,11 @@
       item: Object,
     }),
     created () {
-      this.$axios.get(`${this.$SERVER_URL}/notice-service/notices`)
-        .then((res) => {
+      this.$axios.get(`${this.$SERVER_URL}/notice-service/notices`, {
+        headers: {
+          Token: this.$Token
+        },
+      }).then((res) => {
           console.log('Notice Get Success!', res)
           this.noticeList = res.data.filter(v => v.isImportant)
           this.tutorialList = res.data.filter(v => !v.isImportant)

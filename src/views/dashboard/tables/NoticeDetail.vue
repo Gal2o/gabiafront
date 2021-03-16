@@ -206,6 +206,10 @@
             title: this.title,
             content: this.textbox,
             isImportant: this.isImportant,
+          }, {
+            headers: {
+              Token: this.$Token
+            },
           })
           location.reload()
         } catch (error) {
@@ -214,7 +218,11 @@
       },
       async remove (data) {
         try {
-          await this.$axios.delete(`${this.$SERVER_URL}/notice-service/notices/${data}`)
+          await this.$axios.delete(`${this.$SERVER_URL}/notice-service/notices/${data}`, {
+            headers: {
+              Token: this.$Token
+            },
+          })
           location.reload()
         } catch (error) {
           console.log(error.message)

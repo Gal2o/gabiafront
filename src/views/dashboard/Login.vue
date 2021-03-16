@@ -81,13 +81,6 @@
                               >
                                 로그인
                               </v-btn>
-                              <!-- <v-btn
-                                large
-                                text
-                                class="text-capitalize primary--text"
-                              >
-                                비밀번호 찾기
-                              </v-btn> -->
                             </v-col>
                           </v-form>
                         </v-row>

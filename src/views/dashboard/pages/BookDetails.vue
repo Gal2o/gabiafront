@@ -16,9 +16,8 @@
           <v-img
             class="white--text align-end"
             aspect-ratio="0.8"
-            :src=bookDetails.thumbnail
-          >
-          </v-img>
+            :src="bookDetails.thumbnail"
+          />
         </v-card>
       </v-col>
       <v-col
@@ -44,13 +43,13 @@
               class="mx-0"
             >
               <v-rating
-                v-model=bookDetails.avgReviewRating
+                v-model="bookDetails.avgReviewRating"
                 color="amber"
                 dense
                 half-increments
                 readonly
                 size="14"
-              ></v-rating>
+              />
               <a class="grey--text ml-4 text-decoration-underline" @click="getReviewModal(bookDetails.id)">
                 {{ bookDetails.avgReviewRating }} ({{ bookDetails.reviewCount }})
               </a>
@@ -138,7 +137,6 @@
 <script>
 
 import { UNAUTHORIZED, onUnauthorized } from "@/api/index"
-import { getAuthFromCookie } from "@/util/cookies";
 import { getUserIdFromCookie } from "@/util/cookies";
 import ReviewList from "@/views/dashboard/tables/ReviewList";
 
@@ -179,7 +177,7 @@ export default {
       try {
         await this.$axios.put(`${this.$SERVER_URL}/book-service/books/${bookId}/rent`, null, {
           headers: {
-            Token: getAuthFromCookie(),
+            Token: this.$Token
           }
         })
         location.reload()
@@ -195,7 +193,7 @@ export default {
       try {
         await this.$axios.put(`${this.$SERVER_URL}/book-service/books/${bookId}/rent/${this.bookDetails.rentId}/return`, null, {
           headers: {
-            Token: getAuthFromCookie(),
+            Token: this.$Token
           }
         })
         location.reload()
@@ -211,7 +209,7 @@ export default {
       try {
         await this.$axios.put(`${this.$SERVER_URL}/book-service/books/${bookId}/rent/${this.bookDetails.rentId}/extension`, null, {
           headers: {
-            Token: getAuthFromCookie(),
+            Token: this.$Token
           }
         })
         location.reload()
