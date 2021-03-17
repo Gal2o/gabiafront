@@ -99,7 +99,7 @@
       class="ml-2"
       min-width="0"
       text
-      to="/pages/user"
+      to="/pages/MyPage"
     >
       <v-icon>mdi-account</v-icon>
     </v-btn>
@@ -147,25 +147,26 @@
         default: false,
       },
     },
-
+    created () {
+      this.fetchData()
+    },
     data: () => ({
-      notifications: [
-        '파이썬이 반납 왑료 되었습니다.',
-        'C++ 도서가 신청 완료 되었습니다.',
-        'C++ 도서가 배치 완료 되었습니다.',
-        '자바가 대여가 완료 되었습니다.',
-        '자바 연장이 완료 되었습니다.',
-      ],
+      notifications: [],
     }),
-
     computed: {
       ...mapState(['drawer']),
     },
-
     methods: {
       ...mapMutations({
         setDrawer: 'SET_DRAWER',
       }),
+      async fetchData () {
+        // try {
+
+        // } catch (error) {
+        //   console.log(error.message)
+        // }
+      },
     },
   }
 </script>

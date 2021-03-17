@@ -110,7 +110,7 @@
         {
           icon: 'mdi-account',
           title: '내 정보',
-          to: '/pages/user',
+          to: '/pages/MyPage',
         },
         {
           title: '공지사항',

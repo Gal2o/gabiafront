@@ -83,7 +83,7 @@
               thumbnail: this.item.image,
               publisher: this.item.publisher,
               publishDate: this.item.pubdate,
-              content: this.item.description,
+              content: this.item.description.replace(/(<([^>]+)>)/ig, ''),
               status: 'REQUESTED',
             }, {
               headers: {

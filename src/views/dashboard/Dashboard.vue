@@ -26,7 +26,7 @@
           autoplay
           autoplayHoverPause
           display="7"
-          border="3"
+          border="2"
           space="300"
           height="460"
           :count="bookList.length"
@@ -47,7 +47,7 @@
                     <v-overlay
                       v-if="hover"
                       absolute
-                      color="#F2F2F2"
+                      color="#6E6E6E"
                     >
                       <v-card-text v-if="select.value === 'latest'">
                         추가 된 날: {{slide.createdDate}}

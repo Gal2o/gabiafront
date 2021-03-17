@@ -25,9 +25,9 @@ const router = new VueRouter({
         },
         // Pages
         {
-          name: 'User Profile',
-          path: 'pages/user',
-          component: () => import('@/views/dashboard/pages/UserProfile'),
+          name: 'MyPage',
+          path: 'pages/Mypage',
+          component: () => import('@/views/dashboard/pages/MyPage'),
           meta: { name: '내 정보', auth: true },
         },
         {
