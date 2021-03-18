@@ -80,18 +80,52 @@
         </v-btn>
       </template>
 
-      <v-list
-        :tile="false"
-        nav
-      >
-        <div>
-          <app-bar-item
-            v-for="(n, i) in notifications"
-            :key="`item-${i}`"
-          >
-            <v-list-item-title v-text="n" />
-          </app-bar-item>
-        </div>
+      <v-list two-line>
+        <v-list-item-group
+          v-model="selected"
+          active-class="pink--text"
+          multiple
+        >
+          <template v-for="(item, index) in notifications">
+            <v-list-item :key="item.title">
+              <template v-slot:default="{ active }">
+                <v-list-item-content>
+                  <v-list-item-title v-text="item"></v-list-item-title>
+
+                  <v-list-item-subtitle
+                    class="text--primary"
+                    v-text="item"
+                  ></v-list-item-subtitle>
+
+                  <v-list-item-subtitle v-text="item"></v-list-item-subtitle>
+                </v-list-item-content>
+
+                <v-list-item-action>
+                  <v-list-item-action-text v-text="item"></v-list-item-action-text>
+
+                  <v-icon
+                    v-if="!active"
+                    color="grey lighten-1"
+                  >
+                    mdi-star-outline
+                  </v-icon>
+
+                  <v-icon
+                    v-else
+                    color="yellow darken-3"
+                  >
+                    mdi-star
+                  </v-icon>
+                </v-list-item-action>
+              </template>
+            </v-list-item>
+
+            <v-divider
+              v-if="index < notifications.length - 1"
+              :key="index"
+            ></v-divider>
+          </template>
+        </v-list-item-group>
       </v-list>
     </v-menu>
 
@@ -108,39 +142,11 @@
 
 <script>
   // Components
-  import { VHover, VListItem } from 'vuetify/lib'
   // Utilities
   import { mapState, mapMutations } from 'vuex'
 
   export default {
     name: 'DashboardCoreAppBar',
-
-    components: {
-      AppBarItem: {
-        render (h) {
-          return h(VHover, {
-            scopedSlots: {
-              default: ({ hover }) => {
-                return h(VListItem, {
-                  attrs: this.$attrs,
-                  class: {
-                    'black--text': !hover,
-                    'white--text secondary elevation-12': hover,
-                  },
-                  props: {
-                    activeClass: '',
-                    dark: hover,
-                    link: true,
-                    ...this.$attrs,
-                  },
-                }, this.$slots.default)
-              },
-            },
-          })
-        },
-      },
-    },
-
     props: {
       value: {
         type: Boolean,
@@ -151,7 +157,8 @@
       this.fetchData()
     },
     data: () => ({
-      notifications: [],
+      notifications: ['2332','3232', 'gfghgfgf'],
+      selected: [2],
     }),
     computed: {
       ...mapState(['drawer']),

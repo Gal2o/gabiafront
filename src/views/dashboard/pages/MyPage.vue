@@ -75,6 +75,46 @@
         </v-toolbar>
       </v-menu>
     </v-sheet>
+    <div class="py-3" />
+    <v-row>
+      <v-spacer />
+      <v-col
+        cols="11"
+      >
+        <v-expansion-panels
+          v-model="infoPanel"
+          multiple
+        >
+          <v-expansion-panel @click="expandPanel">
+            <v-expansion-panel-header color="yellow">
+              나의 대출이력 
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+                <v-data-table
+                  :headers="rentHead"
+                  :items="rentHistory"
+                  dark
+                  class="elevation-1"
+                />
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+          <v-expansion-panel @click="expandPanel">
+            <v-expansion-panel-header color="yellow">
+              나의 알림내역
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+                <v-data-table
+                  :headers="alertHead"
+                  :items="alertHistory"
+                  dark
+                  class="elevation-1"
+                />
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </v-col>
+      <v-spacer />
+    </v-row>
   </v-col>
 </template>
 
@@ -92,6 +132,21 @@
       selectedEvent: {},
       selectedElement: null,
       selectedOpen: false,
+      rentHead: [
+        { text: '제목', value: 'bookTitle', align: 'start', filterable: false, },
+        { text: '저자', value: 'bookAuthor'},
+        { text: '반납일', value: 'rentExpiredDate'},
+        { text: '반납여부', value: 'rentStatus'}
+      ],
+      alertHead: [
+        { text: '제목', value: 'title', align: 'start', filterable: false, },
+        { text: '이메일', value: 'email', },
+        { text: '날짜', value: 'createdDate', },
+        { text: '유형', value: 'alertType', },
+      ],
+      infoPanel: [],
+      rentHistory: [],
+      alertHistory: [],
     }),
     created () {
       this.fetchData()
@@ -105,14 +160,10 @@
             },
         })
           this.rentList = data.filter(v => v.rentStatus === 'RENT')
-
           const events = []
 
           for (let i = 0; i < this.rentList.length; i++) {
             const date = new Date(this.rentList[i].rentExpiredDate)
-            // const tmp = new Date(date)
-            // const startDate = new Date(tmp.setDate(tmp.getDate() - 30))
-
             events.push({
               index: this.rentList[i].bookId,
               name: this.rentList[i].bookTitle,
@@ -125,6 +176,32 @@
           this.events = events
         } catch (error) {
             console.log(error.message)
+        }
+      },
+      async expandPanel() {
+        if (this.infoPanel !== 0) {
+          try {
+            const { data } = await this.$axios.get(`${this.$SERVER_URL}/book-service/rent`, {
+              headers: {
+                Token: this.$Token
+              }
+            })
+            this.rentHistory = data.responseDtoList
+          } catch (error) {
+            console.lor(error.message)
+          }
+        }
+        if (this.infoPanel !== 1) {
+          try {
+            const { data } = await this.$axios.get(`${this.$SERVER_URL}/alert-service/alerts`, {
+              headers: {
+                Token: this.$Token
+              }
+            })
+            this.alertHistory = data.responseDtoList
+          } catch (error) {
+            console.lor(error.message)
+          }
         }
       },
       setToday () {
