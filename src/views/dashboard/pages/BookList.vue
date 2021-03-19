@@ -5,6 +5,22 @@
     tag="section"
   >
     <v-row>
+      <v-spacer />
+      <v-col
+        cols="12"
+        md="4"
+      >
+        <v-text-field
+          v-model="find"
+          label="책을 검색하세요."
+          prepend-icon="mdi-book-search"
+          @keyup.enter="findBook(1)"
+        />
+      
+      </v-col>
+      <v-spacer />
+    </v-row>
+    <v-row>
       <v-col
         cols="12"
         md="3"
@@ -70,7 +86,8 @@
       return {
         books: [],
         rendData: [],
-        pagination: {}
+        pagination: {},
+        find: '',
       }
     },
     created() {
@@ -93,18 +110,40 @@
         }
       },
       async onPageChange(newPage) {
-        try {
-          await this.$axios.get(`${this.$SERVER_URL}/book-service/books?page=` + newPage)
-          .then((res) => {
-            this.books = res.data.responseDtoList
-            this.pagination = res.data.pageResponseData
-          })
-        } catch (error) {
-          alert(error.response.data.message)
+        if (this.find.length === 0) {
+          try {
+            await this.$axios.get(`${this.$SERVER_URL}/book-service/books?page=` + newPage)
+            .then((res) => {
+              this.books = res.data.responseDtoList
+              this.pagination = res.data.pageResponseData
+            })
+          } catch (error) {
+            alert(error.response.data.message)
+          }
+        }
+        else {
+          this.findBook(newPage)
         }
       },
       getDetails(val) {
         router.push({ path: '/BookDetails', query: { id: val }})
+      },
+      async findBook(val) {
+        try {
+          const { data } = await this.$axios.get(`${this.$SERVER_URL}/book-service/books/search`, {
+            headers : {
+              Token: getAuthFromCookie()
+            },
+            params: {
+              keyword: this.find.replace(/^\s+|\s+$/g, ''),
+              page: val
+            }
+          })
+          this.books = data.responseDtoList
+          this.pagination = data.pageResponseData
+        } catch (error) {
+          alert(error.message)
+        }
       }
     }
   }
