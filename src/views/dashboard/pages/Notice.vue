@@ -98,7 +98,6 @@
       notices: [],
     }),
     created () {
-      console.log(document.cookie)
       this.fetchData()
     },
     methods: {
