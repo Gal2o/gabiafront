@@ -20,7 +20,7 @@
               dark
               x-large
               :color="$primary"
-              to="/"
+              to="/Login"
             >
               Back to Home
             </v-btn>

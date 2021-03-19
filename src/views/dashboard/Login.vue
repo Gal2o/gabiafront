@@ -233,7 +233,6 @@
             identifier: this.identifier,
             password: this.password,
           })
-          console.log('axios Post Success', headers)
           this.$store.commit('SET_ACCESS_TOKEN', headers.token)
           this.$store.commit('SET_USERID', this.identifier)
           this.$store.commit('SET_ROLE', headers.authority)

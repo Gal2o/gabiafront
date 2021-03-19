@@ -9,48 +9,49 @@ const router = new VueRouter({
   routes: [
     {
       name: 'Login',
-      path: '/login',
+      path: '/Login',
       component: () => import('@/views/dashboard/Login'),
     },
     {
       path: '/',
+      redirect: '/Main',
       component: () => import('@/views/dashboard/Index'),
       children: [
         // Dashboard
         {
           name: 'Dashboard',
-          path: '',
+          path: 'Main',
           component: () => import('@/views/dashboard/Dashboard'),
           meta: { name: '메인화면', auth: true },
         },
         // Pages
         {
           name: 'MyPage',
-          path: 'pages/Mypage',
+          path: 'Mypage',
           component: () => import('@/views/dashboard/pages/MyPage'),
           meta: { name: '내 정보', auth: true },
         },
         {
           name: 'Notice',
-          path: 'pages/notice',
+          path: 'Notice',
           component: () => import('@/views/dashboard/pages/Notice'),
           meta: { name: '공지사항', auth: true },
         },
         {
           name: 'BookList',
-          path: 'pages/BookList',
+          path: 'BookList',
           component: () => import('@/views/dashboard/pages/BookList'),
           meta: { name: '도서목록', auth: true },
         },
         {
           name: 'BookRequest',
-          path: 'pages/BookRequest',
+          path: 'BookRequest',
           component: () => import('@/views/dashboard/pages/BookRequest'),
           meta: { name: '도서신청', auth: true },
         },
         {
           name: 'BookDetails',
-          path: 'pages/BookDetails',
+          path: 'BookDetails',
           component: () => import('@/views/dashboard/pages/BookDetails'),
           meta: { name: '도서상세', auth: true },
         },
@@ -67,13 +68,15 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   if (to.meta.auth && !store.getters.isLogin) {
     alert('로그인이 필요합니다.')
-    next('/login')
+    next('/Login')
     return
   }
-  if (from.path === '*' && to.path === '/logout') {
-    next('/login')
+
+  if (store.getters.isLogin && to.path === '/Login') {
+    next('/')
     return
   }
+
   next()
 })
 

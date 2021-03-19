@@ -58,9 +58,7 @@
           v-if="item.children"
           :key="`group-${i}`"
           :item="item"
-        >
-          <!--  -->
-        </base-item-group>
+        />
 
         <base-item
           v-else
@@ -72,23 +70,22 @@
     </v-list>
 
     <template v-slot:append>
-      <base-item
-        :item="{
-          title: $t('로그아웃'),
-          icon: 'mdi-logout-variant',
-          to: '/logout'
-        }"
-        @click.native="logout"
-      />
+      <v-btn
+        text
+        large
+        block
+        @click="logout"
+      >
+        로그아웃
+        <v-icon right> mdi-logout-variant </v-icon>
+      </v-btn>
     </template>
   </v-navigation-drawer>
 </template>
 
 <script>
   // 바 : 탭 누르면 그 페이지로 이동
-  import {
-    mapState,
-  } from 'vuex'
+  import { mapState } from 'vuex'
   import { deleteCookie } from '@/util/cookies'
   export default {
     name: 'DashboardCoreDrawer',
@@ -105,27 +102,27 @@
         {
           icon: 'mdi-home',
           title: '메인화면',
-          to: '/',
+          to: '/Main',
         },
         {
           icon: 'mdi-account',
           title: '내 정보',
-          to: '/pages/MyPage',
+          to: '/MyPage',
         },
         {
           title: '공지사항',
           icon: 'mdi-alarm-light',
-          to: '/pages/notice',
+          to: '/notice',
         },
         {
           title: '도서목록',
           icon: 'mdi-book-open-variant',
-          to: '/pages/BookList',
+          to: '/BookList',
         },
         {
           title: '도서신청',
           icon: 'mdi-cart-plus',
-          to: '/pages/BookRequest',
+          to: '/BookRequest',
         },
       ],
     }),
@@ -167,7 +164,7 @@
         deleteCookie('userId')
         deleteCookie('role')
         deleteCookie('userNum')
-        this.$router.push('/login')
+        this.$router.push('/Login')
       },
     },
   }
