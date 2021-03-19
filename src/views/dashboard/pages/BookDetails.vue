@@ -137,7 +137,7 @@
 <script>
 
 import { UNAUTHORIZED, onUnauthorized } from "@/api/index"
-import { getUserIdFromCookie } from "@/util/cookies";
+import { getUserIdFromCookie, getAuthFromCookie } from "@/util/cookies";
 import ReviewList from "@/views/dashboard/tables/ReviewList";
 
 export default {
@@ -177,7 +177,7 @@ export default {
       try {
         await this.$axios.put(`${this.$SERVER_URL}/book-service/books/${bookId}/rent`, null, {
           headers: {
-            Token: this.$Token
+            Token: getAuthFromCookie()
           }
         })
         location.reload()
@@ -193,7 +193,7 @@ export default {
       try {
         await this.$axios.put(`${this.$SERVER_URL}/book-service/books/${bookId}/rent/${this.bookDetails.rentId}/return`, null, {
           headers: {
-            Token: this.$Token
+            Token: getAuthFromCookie()
           }
         })
         location.reload()
@@ -209,7 +209,7 @@ export default {
       try {
         await this.$axios.put(`${this.$SERVER_URL}/book-service/books/${bookId}/rent/${this.bookDetails.rentId}/extension`, null, {
           headers: {
-            Token: this.$Token
+            Token: getAuthFromCookie()
           }
         })
         location.reload()

@@ -70,31 +70,34 @@
 </template>
 
 <script>
+  import { getAuthFromCookie } from '@/util/cookies'
   export default {
     data: () => ({
       dialog: false,
       requestList: [],
     }),
     created () {
-      this.$axios.get(`${this.$SERVER_URL}/book-request-service/request-list/`, {
-        headers: {
-          Token: this.$Token
-        },
-      })
-        .then((res) => {
-          this.requestList = res.data.filter(v => !v.deleted && v.status === 'REQUESTED')
-          console.log('RequestList Get Success', this.requestList)
-        }).catch((err) => {
-          console.log('RequestList Get Failed', err)
-        })
+      this.fetchData()
     },
     methods: {
+      async fetchData () {
+        try {
+          const { data } = await this.$axios.get(`${this.$SERVER_URL}/book-request-service/request-list/`, {
+            headers: {
+              Token: getAuthFromCookie()
+            },
+          })
+          this.requestList = data.filter(v => !v.deleted && v.status === 'REQUESTED')
+        } catch (error) {
+          alert(error.message)
+        }
+      },
       async confirm (value) {
         if (confirm('도서를 배치하겠습니까?')) {
           try {
             await this.$axios.put(`${this.$SERVER_URL}/book-request-service/request-list/${value}/confirm`, null, {
               headers: {
-                Token: this.$Token
+                Token: getAuthFromCookie()
               },
             })
             
@@ -109,7 +112,7 @@
           try {
             await this.$axios.delete(`${this.$SERVER_URL}/book-request-service/request-list/${value}/cancel`, {
               headers: {
-                Token: this.$Token
+                Token: getAuthFromCookie()
               },
             })
           } catch (error) {

@@ -141,7 +141,7 @@
 </template>
 
 <script>
-  import { getUserNumFromCookie, deleteCookie } from '@/util/cookies'
+  import { getUserNumFromCookie, deleteCookie, getAuthFromCookie } from '@/util/cookies'
   import { emailvalidate, phonevalidate } from '@/util/validation'
 
   export default {
@@ -181,7 +181,7 @@
             phone: this.updatePhone.replace(/-/g, ''),
           }, {
             headers: {
-              Token: this.$Token
+              Token: getAuthFromCookie()
             },
           })
         } catch (error) {
@@ -192,7 +192,7 @@
         try {
           await this.$axios.delete(`${this.$SERVER_URL}/user-service/users/${getUserNumFromCookie()}`, {
             headers: {
-              Token: this.$Token
+              Token: getAuthFromCookie()
             },
           })
           this.$store.commit('CLEAR_USERID')

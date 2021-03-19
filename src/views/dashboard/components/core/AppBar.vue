@@ -133,7 +133,7 @@
       class="ml-2"
       min-width="0"
       text
-      to="/pages/MyPage"
+      to="/MyPage"
     >
       <v-icon>mdi-account</v-icon>
     </v-btn>

@@ -119,6 +119,7 @@
 </template>
 
 <script>
+  import { getAuthFromCookie } from '@/util/cookies'
   export default {
     data: () => ({
       type: 'month',
@@ -156,7 +157,7 @@
         try {
           const { data } = await this.$axios.get(`${this.$SERVER_URL}/book-service/rent-all`, {
             headers: {
-              Token: this.$Token
+              Token: getAuthFromCookie()
             },
         })
           this.rentList = data.filter(v => v.rentStatus === 'RENT')
@@ -172,7 +173,6 @@
               color: this.colors,
             })
           }
-            
           this.events = events
         } catch (error) {
             console.log(error.message)
@@ -183,24 +183,24 @@
           try {
             const { data } = await this.$axios.get(`${this.$SERVER_URL}/book-service/rent`, {
               headers: {
-                Token: this.$Token
+                Token: getAuthFromCookie()
               }
             })
             this.rentHistory = data.responseDtoList
           } catch (error) {
-            console.lor(error.message)
+            console.log(error.message)
           }
         }
         if (this.infoPanel !== 1) {
           try {
             const { data } = await this.$axios.get(`${this.$SERVER_URL}/alert-service/alerts`, {
               headers: {
-                Token: this.$Token
+                Token: getAuthFromCookie()
               }
             })
             this.alertHistory = data.responseDtoList
           } catch (error) {
-            console.lor(error.message)
+            console.log(error.message)
           }
         }
       },

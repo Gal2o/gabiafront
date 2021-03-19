@@ -44,7 +44,7 @@
 </template>
 
 <script>
-  import { getUserNumFromCookie } from '@/util/cookies'
+  import { getUserNumFromCookie, getAuthFromCookie } from '@/util/cookies'
   export default {
     props: {
       value: Boolean,
@@ -87,7 +87,7 @@
               status: 'REQUESTED',
             }, {
               headers: {
-                Token: this.$Token
+                Token: getAuthFromCookie()
               },
             })
           } catch (error) {

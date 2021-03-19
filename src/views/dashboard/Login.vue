@@ -60,6 +60,7 @@
                                 :rules="idRule"
                                 label="아이디"
                                 required
+                                @keyup.enter="login"
                               />
                               <v-text-field
                                 v-model="password"
@@ -68,6 +69,7 @@
                                 label="비밀번호"
                                 hint="6자리 이상 입력하세요."
                                 required
+                                @keyup.enter="login"
                               />
                             </v-col>
                             <v-col class="d-flex justify-space-between">

@@ -37,10 +37,6 @@
             <td>{{ item.title }}</td>
             <td>{{ item.createdDate }}</td>
           </tr>
-          <Notice-Detail
-            v-model="dialog"
-            :item="item"
-          />
         </tbody>
       </v-simple-table>
     </base-material-card>
@@ -75,19 +71,21 @@
             <td>{{ item.title }}</td>
             <td>{{ item.createdDate }}</td>
           </tr>
-          <Notice-Detail
-            v-model="dialog"
-            :item="item"
-          />
         </tbody>
       </v-simple-table>
     </base-material-card>
+    
+    <Notice-Detail
+      v-model="dialog"
+      :notices="notices"
+    />
   </v-container>
 </template>
 
 <script>
   import NoticeAddForm from '@/views/dashboard/tables/NoticeCreate.vue'
   import NoticeDetail from '@/views/dashboard/tables/NoticeDetail.vue'
+  import { getAuthFromCookie } from '@/util/cookies'
   export default {
     components: {
       'Notice-Add-Form': NoticeAddForm,
@@ -97,25 +95,29 @@
       noticeList: [],
       tutorialList: [],
       dialog: false,
-      item: Object,
+      notices: [],
     }),
     created () {
-      this.$axios.get(`${this.$SERVER_URL}/notice-service/notices`, {
-        headers: {
-          Token: this.$Token
-        },
-      }).then((res) => {
-          console.log('Notice Get Success!', res)
-          this.noticeList = res.data.filter(v => v.isImportant)
-          this.tutorialList = res.data.filter(v => !v.isImportant)
-        }).catch((err) => {
-          console.log('Notice Get Failed!', err)
-        })
+      console.log(document.cookie)
+      this.fetchData()
     },
     methods: {
+      async fetchData () {
+        try {
+          const { data } = await this.$axios.get(`${this.$SERVER_URL}/notice-service/notices`, {
+            headers: {
+              Token: getAuthFromCookie()
+            },
+          })
+          this.noticeList = data.filter(v => v.isImportant)
+          this.tutorialList = data.filter(v => !v.isImportant)
+        } catch (error) {
+          alert(error.message)
+        }
+      },
       goDetail (item) {
         this.dialog = true
-        this.item = item
+        this.notices = item
       },
     },
   }

@@ -64,7 +64,7 @@
 
 <script>
   import router from "@/router";
-
+  import { getAuthFromCookie } from '@/util/cookies'
   export default {
     data() {
       return {
@@ -81,7 +81,7 @@
         try {
           await this.$axios.get(`${this.$SERVER_URL}/book-service/books`, {
             headers: {
-              Token: this.$Token
+              Token: getAuthFromCookie()
             },
           })
           .then((res) => {
@@ -104,7 +104,7 @@
         }
       },
       getDetails(val) {
-        router.push({ path: '/pages/BookDetails', query: { id: val }})
+        router.push({ path: '/BookDetails', query: { id: val }})
       }
     }
   }

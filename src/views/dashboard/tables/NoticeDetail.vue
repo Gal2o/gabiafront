@@ -7,7 +7,7 @@
     >
       <v-card>
         <v-card-title>
-          <span class="headline">{{ item.title }}</span>
+          <span class="headline">{{ notices.title }}</span>
         </v-card-title>
         <v-form>
           <v-spacer />
@@ -15,12 +15,12 @@
             <v-icon large>
               mdi-clock-check-outline
             </v-icon>
-            {{ item.createdDate }}
+            {{ notices.createdDate }}
           </v-card-subtitle>
           <v-spacer />
           <v-card-text
             align="center"
-            v-html="item.content.replace(/(?:\r\n|\r|\n)/g, '<br />')"
+            v-html="notices.content"
           />
           <v-spacer />
           <v-card-actions>
@@ -58,14 +58,14 @@
       <v-card>
         <v-card-title>
           <span
-            v-if="item.isImportant == true"
+            v-if="notices.isImportant == true"
             class="headline"
             required
           >
             공지사항 수정하기
           </span>
           <span
-            v-if="item.isImportant == false"
+            v-if="notices.isImportant == false"
             class="headline"
             required
           >
@@ -118,7 +118,7 @@
             <v-btn
               color="blue darken-1"
               :disabled="!form"
-              @click="update(item.id)"
+              @click="update(notices.id)"
             >
               수정하기
             </v-btn>
@@ -146,7 +146,7 @@
           <v-btn
             color="red darken-3"
             text
-            @click="remove(item.id)"
+            @click="remove(notices.id)"
           >
             삭제하기
           </v-btn>
@@ -164,10 +164,11 @@
 </template>
 
 <script>
+  import { getAuthFromCookie } from '@/util/cookies'
   export default {
     props: {
       value: Boolean,
-      item: Object,
+      notices: Object,
     },
     data: () => ({
       form: false,
@@ -184,7 +185,7 @@
     computed: {
       dialog: {
         get () {
-          return this.value
+          return this.value  
         },
         set (value) {
           this.$emit('input', value)
@@ -208,7 +209,7 @@
             isImportant: this.isImportant,
           }, {
             headers: {
-              Token: this.$Token
+              Token: getAuthFromCookie()
             },
           })
           location.reload()
@@ -220,7 +221,7 @@
         try {
           await this.$axios.delete(`${this.$SERVER_URL}/notice-service/notices/${data}`, {
             headers: {
-              Token: this.$Token
+              Token: getAuthFromCookie()
             },
           })
           location.reload()

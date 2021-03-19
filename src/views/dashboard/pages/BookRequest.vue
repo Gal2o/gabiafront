@@ -74,6 +74,7 @@
   import debounce from 'debounce'
   import BookRequestDetail from '@/views/dashboard/tables/BookRequestDetail.vue'
   import BookRequestEdit from '@/views/dashboard/tables/BookRequestEdit.vue'
+  import { getAuthFromCookie } from '@/util/cookies'
   export default {
     components: {
       'Book-Request-Detail': BookRequestDetail,
@@ -121,7 +122,7 @@
         try {
           const { data } = await this.$axios.get(`${this.$SERVER_URL}/book-request-service/request-list/${value}`, {
             headers: {
-              Token: this.$Token
+              Token: getAuthFromCookie()
             },
             params: {
               page: 1,
@@ -140,7 +141,7 @@
 
         const { data } = await this.$axios.get(`${this.$SERVER_URL}/book-request-service/request-list/${this.search}`, {
           headers: {
-            Token: this.$Token
+            Token: getAuthFromCookie()
           },
           params: { 
             page: 1 
@@ -161,7 +162,7 @@
 
         const { data } = await this.$axios.get(`${this.$SERVER_URL}/book-request-service/request-list/${this.pagetitle}`, {
           headers: {
-            Token: this.$Token
+            Token: getAuthFromCookie()
           },
           params: {
             page: start

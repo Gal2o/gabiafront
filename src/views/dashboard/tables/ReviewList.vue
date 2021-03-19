@@ -232,7 +232,7 @@
 
 <script>
 import {onUnauthorized, UNAUTHORIZED} from "@/api";
-
+import { getAuthFromCookie } from '@/util/cookies'
 export default {
   props: {
     value: Boolean,
@@ -281,7 +281,7 @@ export default {
       try {
         await this.$axios.get(`${this.$SERVER_URL}/review-service/books/${this.bookId}/reviews`, {
           headers: {
-            Token: this.$Token
+            Token: getAuthFromCookie()
           },
         })
           .then((res) => {
@@ -298,7 +298,7 @@ export default {
       try {
         await this.$axios.get(`${this.$SERVER_URL}/review-service/books/${this.bookId}/reviews?page=` + newPage, {
           headers: {
-            Token: this.$Token
+            Token: getAuthFromCookie()
           },
         })
         .then((res) => {
@@ -317,10 +317,10 @@ export default {
            content: this.textbox,
          }, { 
            headers: {
-            Token: this.$Token
+            Token: getAuthFromCookie()
           },
         })
-        alert("review가 추가되었습니다.")
+        alert("리뷰가 추가되었습니다.")
         await this.fetchReviewsWithPage(1)
         this.createdialog = false
       } catch (error) {
@@ -336,7 +336,7 @@ export default {
         this.detailsdialog = true;
         await this.$axios.get(`${this.$SERVER_URL}/review-service/books/reviews/` + reviewId, {
           headers: {
-            Token: this.$Token
+            Token: getAuthFromCookie()
           },
         })
         .then((res) => {

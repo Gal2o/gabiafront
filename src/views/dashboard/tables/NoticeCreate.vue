@@ -91,6 +91,7 @@
 </template>
 
 <script>
+  import { getAuthFromCookie } from '@/util/cookies'
   export default {
     data: () => ({
       dialog: false,
@@ -115,11 +116,11 @@
         try {
           await this.$axios.post(`${this.$SERVER_URL}/notice-service/notices`, {
             title: data.title,
-            content: data.textbox,
+            content: data.textbox.replace(/(?:\r\n|\r|\n)/g, '<br />'),
             isImportant: data.isImportant,
           }, {
             headers: {
-              Token: this.$Token
+              Token: getAuthFromCookie()
             },
           })
           location.reload()

@@ -77,6 +77,7 @@
 
 <script>
   import { Carousel3d, Slide } from 'vue-carousel-3d'
+  import { getAuthFromCookie } from '@/util/cookies'
   export default {
     name: 'DashboardDashboard',
     components: {
@@ -104,7 +105,7 @@
         try {
           const { data } = await this.$axios.get(`${this.$SERVER_URL}/book-service/books/${this.select.value}`, {
             headers: {
-              Token: this.$Token
+              Token: getAuthFromCookie()
             },
           })
           this.bookList = data

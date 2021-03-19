@@ -112,7 +112,7 @@
         {
           title: '공지사항',
           icon: 'mdi-alarm-light',
-          to: '/notice',
+          to: '/Notice',
         },
         {
           title: '도서목록',
