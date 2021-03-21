@@ -17,6 +17,7 @@
         <v-icon>mdi-chevron-left</v-icon>
       </v-btn>
       <v-btn
+        small
         text
         class="ma-2"
         @click="setToday"
@@ -35,8 +36,8 @@
       <v-spacer />
     </v-sheet>
     <v-sheet 
-      height="450"
-      width="900"
+      height="600"
+      width="1100"
       color="grey darken-2"
     >
       <v-calendar
@@ -81,11 +82,8 @@
       <v-col
         cols="11"
       >
-        <v-expansion-panels
-          v-model="infoPanel"
-          multiple
-        >
-          <v-expansion-panel @click="expandPanel">
+        <v-expansion-panels v-model="rentPanel">
+          <v-expansion-panel @click="expandrent(1)">
             <v-expansion-panel-header color="yellow">
               나의 대출이력 
             </v-expansion-panel-header>
@@ -95,10 +93,21 @@
                   :items="rentHistory"
                   dark
                   class="elevation-1"
+                  hide-default-footer
+                />
+                <v-pagination
+                  v-model="rpagination.page"
+                  :length="rpagination.totalPage"
+                  circle
+                  color="yellow"
+                  dark
+                  @input="expandrent"
                 />
             </v-expansion-panel-content>
           </v-expansion-panel>
-          <v-expansion-panel @click="expandPanel">
+        </v-expansion-panels>
+        <v-expansion-panels v-model="alertPanel">
+          <v-expansion-panel @click="expandalert(1)">
             <v-expansion-panel-header color="yellow">
               나의 알림내역
             </v-expansion-panel-header>
@@ -108,6 +117,15 @@
                   :items="alertHistory"
                   dark
                   class="elevation-1"
+                  hide-default-footer
+                />
+                <v-pagination
+                  v-model="apagination.page"
+                  :length="apagination.totalPage"
+                  circle
+                  color="yellow"
+                  dark
+                  @input="expandalert"
                 />
             </v-expansion-panel-content>
           </v-expansion-panel>
@@ -145,9 +163,12 @@
         { text: '날짜', value: 'createdDate', },
         { text: '유형', value: 'alertType', },
       ],
-      infoPanel: [],
+      rentPanel: '',
+      alertPanel: '',
       rentHistory: [],
       alertHistory: [],
+      rpagination: {},
+      apagination: {},
     }),
     created () {
       this.fetchData()
@@ -178,27 +199,31 @@
             console.log(error.message)
         }
       },
-      async expandPanel() {
-        if (this.infoPanel !== 0) {
+      async expandrent(val) {
+        if (!this.rentPanel) {
           try {
-            const { data } = await this.$axios.get(`${this.$SERVER_URL}/book-service/rent`, {
+            const { data } = await this.$axios.get(`${this.$SERVER_URL}/book-service/rent?page=` + val, {
               headers: {
                 Token: getAuthFromCookie()
-              }
+              },
             })
             this.rentHistory = data.responseDtoList
+            this.rpagination = data.pageResponseData
           } catch (error) {
             console.log(error.message)
           }
         }
-        if (this.infoPanel !== 1) {
+      },
+      async expandalert(val) {
+        if (!this.alertPanel) {
           try {
-            const { data } = await this.$axios.get(`${this.$SERVER_URL}/alert-service/alerts`, {
+            const { data } = await this.$axios.get(`${this.$SERVER_URL}/alert-service/alerts?page=` + val, {
               headers: {
                 Token: getAuthFromCookie()
               }
             })
             this.alertHistory = data.responseDtoList
+            this.apagination = data.pageResponseData
           } catch (error) {
             console.log(error.message)
           }

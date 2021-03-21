@@ -17,27 +17,15 @@
       class="px-5 py-3"
     >
       <v-simple-table>
-        <thead>
-          <tr>
-            <th class="text-center">
-              제목
-            </th>
-            <th class="text-center">
-              등록일
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(item, n) in noticeList"
-            :key="n"
-            class="text-center"
-            @click="goDetail(item)"
-          >
-            <td>{{ item.title }}</td>
-            <td>{{ item.createdDate }}</td>
-          </tr>
-        </tbody>
+        <v-data-table
+          :headers="noticeHead"
+          :items="noticeList"
+          :footer-props="{
+            'items-per-page-options': [5]
+          }"
+          class="elevation-1"
+          @click:row="goDetail"
+        />
       </v-simple-table>
     </base-material-card>
 
@@ -51,27 +39,15 @@
       class="px-5 py-3"
     >
       <v-simple-table>
-        <thead>
-          <tr>
-            <th class="text-center">
-              제목
-            </th>
-            <th class="text-center">
-              등록일
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(item, n) in tutorialList"
-            :key="n"
-            class="text-center"
-            @click="goDetail(item)"
-          >
-            <td>{{ item.title }}</td>
-            <td>{{ item.createdDate }}</td>
-          </tr>
-        </tbody>
+        <v-data-table
+          :headers="tutorialHead"
+          :items="tutorialList"
+          :footer-props="{
+            'items-per-page-options': [5]
+          }"
+          class="elevation-1"
+          @click:row="goDetail"
+        />
       </v-simple-table>
     </base-material-card>
     
@@ -96,6 +72,14 @@
       tutorialList: [],
       dialog: false,
       notices: [],
+      noticeHead: [
+        { text: '제목', value: 'title', align: 'center', width: '500'},
+        { text: '등록일', value: 'createdDate', align: 'center' }
+      ],
+      tutorialHead: [
+        { text: '제목', value: 'title', align: 'center', width: '500'},
+        { text: '등록일', value: 'createdDate', align: 'center' }
+      ],
     }),
     created () {
       this.fetchData()

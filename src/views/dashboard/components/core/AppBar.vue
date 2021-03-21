@@ -50,14 +50,13 @@
       <v-icon>mdi-cog</v-icon>
     </v-btn>
 
-    <v-menu
+    <!-- <v-menu
       bottom
       left
       offset-y
       origin="top right"
       transition="scale-transition"
     >
-      <!-- 알람 / 배지 -->
       <template v-slot:activator="{ attrs, on }">
         <v-btn
           class="ml-2"
@@ -127,7 +126,7 @@
           </template>
         </v-list-item-group>
       </v-list>
-    </v-menu>
+    </v-menu> -->
 
     <v-btn
       class="ml-2"
@@ -154,11 +153,10 @@
       },
     },
     created () {
-      this.fetchData()
     },
     data: () => ({
-      notifications: ['2332','3232', 'gfghgfgf'],
-      selected: [2],
+      // notifications: [],
+      // selected: [2],
     }),
     computed: {
       ...mapState(['drawer']),
@@ -167,13 +165,6 @@
       ...mapMutations({
         setDrawer: 'SET_DRAWER',
       }),
-      async fetchData () {
-        // try {
-
-        // } catch (error) {
-        //   console.log(error.message)
-        // }
-      },
     },
   }
 </script>
