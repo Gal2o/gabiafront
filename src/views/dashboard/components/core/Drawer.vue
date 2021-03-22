@@ -23,7 +23,9 @@
       expand
       nav
     >
-      <v-list-item>
+      <v-list-item
+        @click="goHome"
+      >
         <!-- 바 : 로고, 제목 부분 -->
         <v-list-item-avatar
           class="align-self-center"
@@ -166,6 +168,9 @@
         deleteCookie('userNum')
         this.$router.push('/Login')
       },
+      goHome() {
+        this.$router.push('/Main')
+      }
     },
   }
 </script>
