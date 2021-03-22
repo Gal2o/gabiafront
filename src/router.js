@@ -13,6 +13,11 @@ const router = new VueRouter({
       component: () => import('@/views/dashboard/Login'),
     },
     {
+      name: 'Error',
+      path: '/Error',
+      component: () => import('@/views/dashboard/pages/Error'),
+    },
+    {
       path: '/',
       redirect: '/Main',
       component: () => import('@/views/dashboard/Index'),
@@ -58,9 +63,8 @@ const router = new VueRouter({
       ],
     },
     {
-      path: '*',
-      name: 'Error',
-      component: () => import('@/views/dashboard/pages/Error'),
+      path: '/:pathMatch(.*)*',
+      redirect: 'Error',
     },
   ],
 })

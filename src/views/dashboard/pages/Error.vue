@@ -6,14 +6,14 @@
     >
       <v-row class="logo-wrapper" />
       <v-row class="d-flex justify-center">
-        <v-col cols="8">
+        <v-col cols="12">
           <div class="card">
             <span class="error-logo"> 404 </span>
             <p class="error-text">
-              Oops. Looks like the page you're looking for no longer exists
+              해당 페이지를 찾을 수 없습니다.
             </p>
             <p class="error-subtext">
-              But we're here to bring you back to safety
+              올바른 경로로 접속해주세요.
             </p>
             <v-btn
               class="text-capitalize"
@@ -22,7 +22,7 @@
               :color="$primary"
               to="/Login"
             >
-              Back to Home
+              돌아가기
             </v-btn>
           </div>
         </v-col>
