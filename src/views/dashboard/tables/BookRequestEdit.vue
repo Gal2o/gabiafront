@@ -1,7 +1,7 @@
 <template>
   <v-dialog
     v-model="dialog"
-    max-width="1200px"
+    max-width="1600px"
   >
     <template v-slot:activator="{ on, attrs }">
       <v-btn
@@ -88,6 +88,10 @@
             },
           })
           this.requestList = data.filter(v => !v.deleted && v.status === 'REQUESTED')
+          this.requestList.destination = this.requestList.filter(v => v.destination === 'HEAD'
+            ? v.destination = '본사' : v.destination === 'GASAN'
+            ? v.destination = '가산IDC' : v.destination === 'SEOCHO'
+            ? v.destination = '서초IDC' : v.destination = '가산W센터')
         } catch (error) {
           alert(error.message)
         }

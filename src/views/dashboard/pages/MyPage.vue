@@ -209,6 +209,9 @@
             })
             this.rentHistory = data.responseDtoList
             this.rpagination = data.pageResponseData
+            this.rentHistory.rentStatus = this.rentHistory.filter(v => v.rentStatus === 'RENT'
+              ? v.rentStatus = '대여중' : v.rentStatus === 'RETURN'
+              ? v.rentStatus = '대여가능' : v.rentStatus = '연체중')
           } catch (error) {
             console.log(error.message)
           }
@@ -224,6 +227,11 @@
             })
             this.alertHistory = data.responseDtoList
             this.apagination = data.pageResponseData
+            this.alertHistory.alertType = this.alertHistory.filter(v => v.alertType === 'REQUESTED'
+              ? v.alertType = '도서 신청완료' : v.alertType === 'DISPLAY_COMPLETED'
+              ? v.alertType = '도서 구매완료' : v.alertType === 'RENT'
+              ? v.alertType = '도서 대여' : v.alertType === 'RETURN_ONE_DAY_BEFORE'
+              ? v.alertType = '도서 반납 하루 전' : v.alertType = '도서 반납')
           } catch (error) {
             console.log(error.message)
           }
