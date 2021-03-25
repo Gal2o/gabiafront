@@ -49,7 +49,7 @@
           />
           <v-card-text
             align="center"
-            v-html="item.title.replace(/(<([^>]+)>)/ig, '')"
+            v-html="item.title"
           />
         </v-card>
       </v-col>
@@ -149,6 +149,7 @@
         })
 
         this.bookList = data.items
+        this.bookList.title = data.items.filter(v => v.title = v.title.replace(/(<([^>]+)>)/ig, ''))
         this.pagecurrent = data.start
         data.total > 1000 ? this.pagetotal = Math.ceil(1000 / 12) : this.pagetotal = Math.ceil(data.total / 12)
         this.pagetitle = this.search
@@ -170,6 +171,7 @@
         })
 
         this.bookList = data.items
+        this.bookList.title = data.items.filter(v => v.title = v.title.replace(/(<([^>]+)>)/ig, ''))
         this.pagecurrent = value
       },
       goBookDetail (item) {
